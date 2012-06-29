@@ -1,0 +1,52 @@
+<?xml version="1.0"?>
+<project name="lotusnotes" default="gitpush" basedir="..">
+   
+   <property environment="env"/>
+   <property file="build/${buildDetails}.properties"/>
+   <property file="build/build.properties"/>
+
+
+	<macrodef name="git">
+		<attribute name="command" />
+		<attribute name="dir" default="" />
+		<element name="args" optional="true" />
+		<sequential>
+			<echo message="git @{command}" />
+			<exec executable="git" dir="@{dir}">
+				<arg value="@{command}" />
+				<args/>
+			</exec>
+		</sequential>
+	</macrodef>
+
+	    
+	<target name="gitpush" description="Commits all changes to git release branch">
+		<property name="commit-version" 	value="${env.JOB_NAME}-prod-${env.BUILD_NUMBER}" />
+		 <git command="checkout">
+			<args>
+				<arg value="master" />	
+			</args>
+		</git>
+		
+		<!-- in case you have problems here due to fast-forward erros try the following command: -->
+		<!-- git clean -fdx -->
+		<!-- or make sure to enable "Clean after checkout" in the jenkins git part -->
+		
+		<git command="add">
+			<args>
+				<arg value="${releaseDir}/${short-class}.jar" />	
+			</args>
+		</git>
+		<git command="commit">
+			<args>
+				<arg value="-am ${commit-version}" />
+			</args>
+		</git>
+		<git command="push">
+			<args>
+				<arg value="origin" />	
+				<arg value="master" />	
+			</args>
+		</git>
+	</target>
+</project>

@@ -1,0 +1,11 @@
+*.class
+svndump
+.settings
+.gradle
+bin
+dist
+logs
+doc
+TracTest.properties
+Addresses.sqlite
+NotesAdress2SQLite.properties

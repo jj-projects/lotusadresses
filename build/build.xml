@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<project name="lotusnotes" default="run" basedir="..">
+	
+	<tstamp>
+  		<format property="TODAY" pattern="yyyy-MM-dd HH:mm:ss" />
+	</tstamp>
+	
+	<property environment="env"/>
+
+	<property file="build/${buildDetails}.properties"/>
+	<property file="build/build.properties"/>
+
+    <path id="classpath">
+        <fileset dir="${libDir}" includes="**/*.jar"/>
+    </path>
+
+   <target name="clean">
+    <delete dir="${outputDir}" />
+    <delete dir="${distDir}" />
+    <delete dir="${distDir}/svndump" />
+
+   </target>
+   <target name="prepare" depends="clean">
+    <mkdir dir="${outputDir}" />
+    <mkdir dir="${distDir}" />
+   	<mkdir dir="${distDir}/logs" />
+    
+    <exec executable="git" output="${distDir}/svndump">
+   	    <arg line="rev-parse HEAD"/>
+    </exec>
+   	
+   	<replaceregexp 
+   	        file="${distDir}/svndump" 
+   	        match="\n" 
+   	        replace="" 
+   			flags="g" 
+   	/> 
+   	
+   	<loadresource property="build.rev">
+   		<file file="${distDir}/svndump"/>
+   	</loadresource>
+   	
+   </target>
+	
+   <target name="compile" depends="prepare">
+     <javac includeAntRuntime="false" encoding="8859_1" srcdir="${sourceDir}" destdir="${outputDir}" classpathref="classpath" debug="true" debuglevel="lines,vars,source"/>
+   </target>
+	
+   <target name="jar" depends="compile">
+
+   		<jar destfile="${distDir}/${short-class}.jar"
+   	   	         basedir="${outputDir}"
+   	   	         includes="**/*.class">
+   	   	      <manifest>
+   	   	        <attribute name="Main-Class" value="${main-class}"/>
+				<attribute name="Manifest-Version" value="1.0"/>
+   	   			<attribute name="Specification-Title" value="${description}"/>
+   	   			<attribute name="Specification-Version" value="2.0"/>
+   	   	      	<attribute name="Implementation-Title" value="${main-class}"/>
+                <attribute name="Implementation-Version" value="${build.rev}"/>
+                <attribute name="Implementation-Build" value="${env.JOB_NAME}-${env.BUILD_NUMBER}"/>
+   	         	<attribute name="Implementation-Date" value="${TODAY}"/>
+   	         	<attribute name="Implementation-Vendor" value="JJ-Projects Joerg Juenger, Munich, Germany; Joerg Juenger"/>
+   	   	      </manifest>
+   	   	    </jar>    
+  	 <echo>${line.separator}</echo>
+ 	 <echo>Main Class: ${main-class}</echo>
+	 <echo>Jar File: ${short-class}.jar</echo>
+	 <echo>Description: ${description}</echo>
+  	 <echo>Implementation-Date: ${TODAY}</echo>
+   	 <echo>Implementation-Version: ${build.rev}</echo>
+  	 <echo>Implementation-Build: ${env.JOB_NAME}-${env.BUILD_NUMBER}</echo>
+   	 <echo>${line.separator}</echo>
+   </target>
+	
+	<target name="release" depends="jar">
+		<copy file="${distDir}/${short-class}.jar" todir="${releaseDir}"/>
+	    <copy file="${releaseDir}/start_${short-class}.sh" todir="${distDir}"/>
+	    <copy file="${releaseDir}/${short-class}_logging.properties" todir="${distDir}"/>
+	    <copy file="${releaseDir}/${short-class}.properties" todir="${distDir}"/>
+	</target>
+	
+	<target name="doc" depends="prepare">
+		 <javadoc
+		          access="public"
+		           destdir="${docDir}"
+		           author="true"
+		           version="true"
+		           use="true"
+		           windowtitle="${name} API Documentation"
+		       >
+		        <fileset dir="${sourceDir}" defaultexcludes="yes">
+		            <include name="**/*.java"/>
+		        </fileset>
+		    </javadoc>
+	</target>
+	<target name="run" depends="jar">
+	        <java fork="true" classname="${main-class}">
+	        	<arg line="${short-class}.properties -Djava.util.logging.config.file=${short-class}_logging.properties"/>
+	            <classpath>
+	                <path refid="classpath"/>
+	                <path location="${distDir}/${short-class}.jar"/>
+	            </classpath>
+	        </java>
+	    </target>
+</project>
+
+    
