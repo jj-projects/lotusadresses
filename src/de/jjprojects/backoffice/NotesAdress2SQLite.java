@@ -63,7 +63,7 @@ public class NotesAdress2SQLite extends LotusConnector {
 			Data_Contact scContact = new Data_Contact ();
 			assert null != scContact : "scContact is invalid (null)";
 			int count = 0;
-			while (null != doc && count < 20) {
+			while (null != doc && count < 200000) {
 				String strKey = doc.getItemValueString("DocID");
 				if (null != strKey) {
 					scContact.dataFromLotusDoc (doc);

@@ -24,7 +24,8 @@ public class SQLiteAddressDB {
 	private static final String PHONE_FIELD = "phone";
    private static final String MOBILE_FIELD = "mobile";
    private static final String EMAIL_FIELD = "email";
-	private static final String DHKEY_FIELD = "dhkey";
+   private static final String DHKEY_FIELD = "dhkey";
+   private static final String COMPKEY_FIELD = "companykey";
 
 	private static final String FULL_NAME_INDEX = "full_name_index";
 	private static final String CITY_INDEX = "city_index";
@@ -52,7 +53,7 @@ public class SQLiteAddressDB {
 
 			db.beginTransaction(SqlJetTransactionMode.WRITE);
 			try {            
-				String createTableQuery = "CREATE TABLE " + TABLE_NAME + " (" + DHKEY_FIELD + " TEXT NOT NULL PRIMARY KEY , " + SIR_NAME_FIELD + " TEXT NOT NULL, " + FIRST_NAME_FIELD + " TEXT NOT NULL, " + COMPANY_FIELD + " TEXT NOT NULL, " + PHONE_FIELD + " TEXT NOT NULL, " + MOBILE_FIELD + " TEXT NOT NULL, " + CITY_FIELD + " TEXT NOT NULL, " + EMAIL_FIELD + " TEXT NOT NULL)";
+				String createTableQuery = "CREATE TABLE " + TABLE_NAME + " (" + DHKEY_FIELD + " TEXT NOT NULL PRIMARY KEY , " + SIR_NAME_FIELD + " TEXT NOT NULL, " + FIRST_NAME_FIELD + " TEXT NOT NULL, " + COMPANY_FIELD + " TEXT NOT NULL, " + PHONE_FIELD + " TEXT NOT NULL, " + MOBILE_FIELD + " TEXT NOT NULL, " + CITY_FIELD + " TEXT NOT NULL, " + EMAIL_FIELD + " TEXT NOT NULL, " + COMPKEY_FIELD + " TEXT NOT NULL)";
 				String createFirstNameIndexQuery = "CREATE INDEX " + FULL_NAME_INDEX + " ON " + TABLE_NAME + "(" +  FIRST_NAME_FIELD + "," + SIR_NAME_FIELD + ")";
 				String createCityIndexQuery = "CREATE INDEX " + CITY_INDEX + " ON " + TABLE_NAME + "(" +  CITY_FIELD + ")";
 				String createCompanyIndexQuery = "CREATE INDEX " + COMPANY_INDEX + " ON " + TABLE_NAME + "(" +  COMPANY_FIELD + ")";
@@ -92,7 +93,8 @@ public class SQLiteAddressDB {
 			try {
 				ISqlJetTable table = db.getTable(TABLE_NAME);
 				table.insert(contact.getAddrKey(), contact.getSirName(), contact.getFirstName(), 
-							 contact.getCompany(), contact.getPhone(),   contact.getMobile(),   contact.getCity(), contact.getEMail());
+							 contact.getCompany(), contact.getPhone(),   contact.getMobile(),   contact.getCity(), contact.getEMail(),
+							 contact.getCompanyKey());
 				result = true;
 			} finally {
 				db.commit();
