@@ -1,6 +1,9 @@
 package de.jjprojects.lotus;
 
 import java.util.Date;
+import java.util.Properties;
+
+import de.jjprojects.JJPException;
 
 import lotus.domino.Document;
 import lotus.domino.Item;
@@ -13,8 +16,11 @@ import lotus.domino.NotesException;
  */
 public abstract class NotesElement {
 
-	public void dataFromLotusDoc (Document doc) throws NotesException {
-		this.setDocID(doc.getItemValueString("DocID"));
+	public void dataFromLotusDoc (Document doc, Properties props) throws NotesException, JJPException {
+	   if (null == props)
+	      throw new JJPException("Properties are invalid (null)!");
+
+		this.setDocID(doc.getItemValueString(props.getProperty("db_col_rowkey", "DocID")));
 	};
 	
 

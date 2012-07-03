@@ -66,7 +66,7 @@ public class NotesAdress2SQLite extends LotusConnector {
 			while (null != doc && count < 200000) {
 				String strKey = doc.getItemValueString("DocID");
 				if (null != strKey) {
-					scContact.dataFromLotusDoc (doc);
+					scContact.dataFromLotusDoc (doc, this.getProperties());
 					naLogger.info(scContact.toString());
 					
 					sqlDb.insertAddress(scContact);

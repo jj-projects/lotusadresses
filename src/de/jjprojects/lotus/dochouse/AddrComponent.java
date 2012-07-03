@@ -3,8 +3,11 @@
  */
 package de.jjprojects.lotus.dochouse;
 
+import java.util.Properties;
+
 import lotus.domino.Document;
 import lotus.domino.NotesException;
+import de.jjprojects.JJPException;
 import de.jjprojects.util;
 import de.jjprojects.lotus.NotesElement;
 
@@ -14,26 +17,30 @@ import de.jjprojects.lotus.NotesElement;
  */
 public abstract class AddrComponent extends NotesElement {
 	
-	public void dataFromLotusDoc (Document doc) throws NotesException {
-			super.dataFromLotusDoc (doc);
+	public void dataFromLotusDoc (Document doc, Properties props) throws NotesException, JJPException {
+			super.dataFromLotusDoc (doc, props);
 			
-			this.setEMail(doc.getItemValueString("AdrEMail"));
+			if (null == props)
+			   throw new JJPException("Properties are invalid (null)!");
+			
+			this.setEMail(doc.getItemValueString(props.getProperty("db_col_email", "AdrEMail")));
 			this.setAddrKey(this.getDocID());
-			String parentKey = doc.getItemValueString("AdrParentSearchKey");
+			String parentKey = doc.getItemValueString(props.getProperty("db_col_companykey", "AdrParentSearchKey"));
 			if (null == parentKey)
 				parentKey = this.getAddrKey();
 			this.setCompanyKey(parentKey);
-			this.setSirName(doc.getItemValueString("AdrName"));
-			this.setFirstName(doc.getItemValueString("AdrFirstName"));
-			this.setCompany(doc.getItemValueString("AdrOrganization"));
-			this.setZip(doc.getItemValueString("AdrZip"));
-			this.setCity(doc.getItemValueString("AdrCity"));
-			this.setPhone(doc.getItemValueString("AdrPhoneComplete"));
-			this.setMobile(doc.getItemValueString("AdrPhoneMobile"));
+			this.setSirName(doc.getItemValueString(props.getProperty("db_col_name", "AdrName")));
+			this.setFirstName(doc.getItemValueString(props.getProperty("db_col_companykey", "AdrFirstName")));
+			this.setCompany(doc.getItemValueString(props.getProperty("db_col_company", "AdrOrganization")));
+			this.setZip(doc.getItemValueString(props.getProperty("db_col_zip", "AdrZip")));
+			this.setCity(doc.getItemValueString(props.getProperty("db_col_city", "AdrCity")));
+			this.setPhone(doc.getItemValueString(props.getProperty("db_col_phone", "AdrPhoneComplete")));
+			this.setMobile(doc.getItemValueString(props.getProperty("db_col_mobile", "AdrPhoneMobile")));
 	}
 
 	public String toString () {
-		return new String ("Name: " + getName() + ", Org: " + Company + ", Key: " + addrKey + ", Phone:" + Phone);
+		return new String ("Key: " + this.getAddrKey() + ", Name: " + getName() + ", Org: " + this.getCompany() + ", OrgKey: " 
+		                   + this.getCompanyKey() + ", Phone:" + this.getPhone());
 	}
 
 	/**
@@ -187,12 +194,12 @@ public abstract class AddrComponent extends NotesElement {
 		return Mobile;
 	}
 
-	protected String stripPhone(String s) {  
+	private String stripPhone(String s) {  
 	    String good = " +0123456789";
 	    return util.stripChars (good, s);
 	}
 	
-	protected String stripEmail(String s) {  
+	private String stripEmail(String s) {  
 	    String good = " abcdefghijklmnopqrstuvwxyzŠšŸABCDEFGHIJKLMNOPQRSTUVWXYZ€…†0123456789<>@._-";
 	    return util.stripChars (good, s);
 	}

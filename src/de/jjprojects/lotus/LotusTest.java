@@ -59,7 +59,7 @@ public class LotusTest extends LotusConnector{
 				if (null != doc) {
 					naLogger.info(doc.toString());
 					Data_Contact adr = new Data_Contact ();
-					adr.dataFromLotusDoc(doc);
+					adr.dataFromLotusDoc(doc, this.getProperties());
 					naLogger.info(adr.toString());
 				}
 			
