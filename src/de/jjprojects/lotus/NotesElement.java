@@ -11,7 +11,7 @@ import lotus.domino.NotesException;
 
 /**
  * @since 2009-07-03
- * @author Joerg Juenger; Copyright 2009 ff. JJ-Projects Joerg Juenger, Munich, Germany
+ * @author Joerg Juenger; Copyright 2009 ff. JJ-Projects Joerg Juenger, Ebersberg, Germany
  *
  */
 public abstract class NotesElement {

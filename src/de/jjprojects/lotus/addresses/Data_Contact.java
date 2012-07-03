@@ -1,10 +1,10 @@
 /**
  * 
  */
-package de.jjprojects.lotus.dochouse;
+package de.jjprojects.lotus.addresses;
 
 /**
- * @author Joerg Juenger; Copyright 2009 ff. JJ-Projects Joerg Juenger, Munich, Germany
+ * @author Joerg Juenger; Copyright 2009 ff. JJ-Projects Joerg Juenger, Ebersberg, Germany
  *
  */
 public class Data_Contact extends AddrComponent {

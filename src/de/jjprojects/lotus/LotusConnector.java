@@ -18,7 +18,8 @@ import lotus.domino.NotesFactory;
 import lotus.domino.Session;
 
 /**
- * @author joerg
+ * General service provider calss for Lotus Notes Connections including service to open databases
+ * @author Joerg Juenger; Copyright 2012 ff. JJ-Projects Joerg Juenger, Ebersberg, Germany
  *
  */
 public abstract class LotusConnector {

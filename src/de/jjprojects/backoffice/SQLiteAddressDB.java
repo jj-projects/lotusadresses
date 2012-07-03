@@ -9,8 +9,13 @@ import org.tmatesoft.sqljet.core.table.ISqlJetTable;
 import org.tmatesoft.sqljet.core.table.ISqlJetTransaction;
 import org.tmatesoft.sqljet.core.table.SqlJetDb;
 
-import de.jjprojects.lotus.dochouse.AddrComponent;
-
+import de.jjprojects.lotus.addresses.AddrComponent;
+/**
+ * create and fill a SQLITE database from de.jjprojects.lotus.addresses.AddrComponent 
+ * 
+ * @author Joerg Juenger; Copyright 2012 ff. JJ-Projects Joerg Juenger, Ebersberg, Germany
+ *
+ */
 public class SQLiteAddressDB {
 
 	static Logger naLogger = Logger.getLogger("de.jjprojects.backoffice");

@@ -1,7 +1,7 @@
 /**
  * 
  */
-package de.jjprojects.lotus.dochouse;
+package de.jjprojects.lotus.addresses;
 
 import java.util.Properties;
 
@@ -12,7 +12,7 @@ import de.jjprojects.util;
 import de.jjprojects.lotus.NotesElement;
 
 /**
- * @author Joerg Juenger; Copyright 2012 ff. JJ-Projects Joerg Juenger, Munich, Germany
+ * @author Joerg Juenger; Copyright 2012 ff. JJ-Projects Joerg Juenger, Ebersberg, Germany
  *
  */
 public abstract class AddrComponent extends NotesElement {

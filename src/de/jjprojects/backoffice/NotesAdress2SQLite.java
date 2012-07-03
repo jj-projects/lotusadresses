@@ -11,7 +11,7 @@ import lotus.domino.Document;
 import lotus.domino.DocumentCollection;
 import lotus.domino.Session;
 import de.jjprojects.lotus.LotusConnector;
-import de.jjprojects.lotus.dochouse.Data_Contact;
+import de.jjprojects.lotus.addresses.Data_Contact;
 
 /**
  * utility to read dochouse addresses and insert them into a SQLite database (e.g. to take them on an iPhone)

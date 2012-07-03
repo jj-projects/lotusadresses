@@ -1,7 +1,3 @@
-/**
- * $Rev: 1055 $ $Date: 2010-10-08 14:36:04 +0200 (Fri, 08 Oct 2010) $ $Author: joerg $
- * @authoer Joerg Juenger; Copyright 2011 ff. JJ-Projects Joerg Juenger, Munich, Germany
- */
 package de.jjprojects;
 
 import java.util.Date;
@@ -15,6 +11,11 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.text.CharacterIterator;
 import java.text.StringCharacterIterator;
+
+/**
+ * @author Joerg Juenger; Copyright 2012 ff. JJ-Projects Joerg Juenger, Ebersberg, Germany
+ *
+ */
 
 public class util {
 	static Logger naLogger = Logger.getLogger("ag.fast.util");

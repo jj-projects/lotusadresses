@@ -6,12 +6,12 @@ package de.jjprojects.lotus;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import de.jjprojects.lotus.dochouse.Data_Contact;
-
 import lotus.domino.Database;
 import lotus.domino.Document;
 import lotus.domino.DocumentCollection;
 import lotus.domino.Session;
+
+import de.jjprojects.lotus.addresses.Data_Contact;
 
 /**
  * Test class housing test code for apps which need to connect to a Lotus Notes server

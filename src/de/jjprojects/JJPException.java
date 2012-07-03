@@ -1,4 +1,8 @@
 package de.jjprojects;
+/**
+ * @author Joerg Juenger; Copyright 2012 ff. JJ-Projects Joerg Juenger, Ebersberg, Germany
+ *
+ */
 
 public class JJPException extends Exception {
 
