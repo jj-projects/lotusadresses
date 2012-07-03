@@ -1,6 +1,3 @@
-/**
- * 
- */
 package de.jjprojects.backoffice;
 
 import java.util.logging.Level;

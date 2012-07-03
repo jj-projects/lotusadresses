@@ -8,4 +8,5 @@ logs
 doc
 TracTest.properties
 Addresses.sqlite
+./NotesAdress2SQLite.properties
 NotesAdress2SQLite.properties
