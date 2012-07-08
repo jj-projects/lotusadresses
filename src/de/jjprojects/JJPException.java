@@ -1,5 +1,7 @@
 package de.jjprojects;
 /**
+ * basic exception class for all JJ-Projects specific exceptions;<br>
+ * please derive all specific exceptions from this one !
  * @author Joerg Juenger; Copyright 2012 ff. JJ-Projects Joerg Juenger, Ebersberg, Germany
  *
  */

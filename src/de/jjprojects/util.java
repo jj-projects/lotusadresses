@@ -13,6 +13,8 @@ import java.text.CharacterIterator;
 import java.text.StringCharacterIterator;
 
 /**
+ * provides several static utility functions
+ * 
  * @author Joerg Juenger; Copyright 2012 ff. JJ-Projects Joerg Juenger, Ebersberg, Germany
  *
  */

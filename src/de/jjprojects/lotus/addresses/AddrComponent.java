@@ -59,22 +59,22 @@ public abstract class AddrComponent extends NotesElement {
 	 * @return the name
 	 */
 	public String getSirName() {
-		return sirName;
+		return null == sirName ? "" : sirName;
 	}
 
 	/**
 	 * @return the name
 	 */
 	public String getFirstName() {
-		return firstName;
-	}
+	   return null == firstName ? "" : firstName;
+}
 
 	/**
 	 * @return the name
 	 */
 	public String getName() {
-		return firstName + " " + sirName;
-	}
+		return getFirstName() + " " + this.getSirName();
+}
 
 
 	/**
@@ -89,8 +89,8 @@ public abstract class AddrComponent extends NotesElement {
 	 * @return the addrKey
 	 */
 	public String getCompanyKey() {
-		return companyKey;
-	}
+	     return null == companyKey ? "" : companyKey;
+}
 
 	/**
 	 * @param addrKey the addrKey to set
@@ -104,6 +104,7 @@ public abstract class AddrComponent extends NotesElement {
 	 * @return the addrKey
 	 */
 	public String getAddrKey() {
+	   assert null != addrKey : "unique address key is not allowed to be NULL!";
 		return addrKey;
 	}
 
@@ -119,7 +120,7 @@ public abstract class AddrComponent extends NotesElement {
 	 * @return the eMail
 	 */
 	public String getEMail() {
-		return eMail;
+      return null == eMail ? "" : eMail;
 	}
 
 	/**
@@ -133,7 +134,7 @@ public abstract class AddrComponent extends NotesElement {
 	 * @return the company
 	 */
 	public String getCompany() {
-		return Company;
+      return null == Company ? "" : Company;
 	}
 	/**
 	 * @param city the city to set
@@ -176,8 +177,8 @@ public abstract class AddrComponent extends NotesElement {
 	 * @return the phone
 	 */
 	public String getPhone() {
-		return Phone;
-	}
+	     return  (null == Phone) ? "" : Phone;
+}
 
 	/**
 	 * @param phone the mobile phone number to set
@@ -191,8 +192,8 @@ public abstract class AddrComponent extends NotesElement {
 	 * @return the mobile phone number
 	 */
 	public String getMobile() {
-		return Mobile;
-	}
+      return  (null == Mobile) ? "" : Mobile;
+}
 
 	private String stripPhone(String s) {  
 	    String good = " +0123456789";

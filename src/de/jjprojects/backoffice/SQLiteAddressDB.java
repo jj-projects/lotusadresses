@@ -13,8 +13,8 @@ import de.jjprojects.lotus.addresses.AddrComponent;
 /**
  * create and fill a SQLITE database from de.jjprojects.lotus.addresses.AddrComponent 
  * 
+ * @see de.jjprojects.lotus.addresses.AddrComponent
  * @author Joerg Juenger; Copyright 2012 ff. JJ-Projects Joerg Juenger, Ebersberg, Germany
- *
  */
 public class SQLiteAddressDB {
 

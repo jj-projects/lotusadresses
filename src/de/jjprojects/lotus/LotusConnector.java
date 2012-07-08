@@ -113,7 +113,7 @@ public abstract class LotusConnector {
 	 */
 	protected void mainLoop(String argv[]) {
 		try {
-
+ 
 			String file = null;
 			if (1 <= argv.length)
 				file = argv[0];
