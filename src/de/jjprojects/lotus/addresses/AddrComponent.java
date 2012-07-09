@@ -29,8 +29,8 @@ public abstract class AddrComponent extends NotesElement {
 			if (null == parentKey)
 				parentKey = this.getAddrKey();
 			this.setCompanyKey(parentKey);
-			this.setSirName(doc.getItemValueString(props.getProperty("db_col_name", "AdrName")));
-			this.setFirstName(doc.getItemValueString(props.getProperty("db_col_companykey", "AdrFirstName")));
+			this.setSirName(doc.getItemValueString(props.getProperty("db_col_lastname", "AdrName")));
+			this.setFirstName(doc.getItemValueString(props.getProperty("db_col_firstname", "AdrFirstName")));
 			this.setCompany(doc.getItemValueString(props.getProperty("db_col_company", "AdrOrganization")));
 			this.setZip(doc.getItemValueString(props.getProperty("db_col_zip", "AdrZip")));
 			this.setCity(doc.getItemValueString(props.getProperty("db_col_city", "AdrCity")));
