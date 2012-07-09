@@ -11,3 +11,4 @@ Addresses.sqlite
 ./NotesAdress2SQLite.properties
 NotesAdress2SQLite.properties
 Addresses_dh_all.sqlite
+.DS_Store
