@@ -123,6 +123,7 @@ public class NotesAdress2SQLite extends LotusConnector {
 	   String filePath = this.getProperties().getProperty("php_template", "./db.php");
       FileReader phpFile = new FileReader (filePath);
       CharBuffer buff = CharBuffer.allocate (2000);
+      buff.clear();
       phpFile.read(buff);
       String phpTemplate = new String (buff.array());
       phpTemplate = phpTemplate.replaceFirst("<db>", nowStr);
