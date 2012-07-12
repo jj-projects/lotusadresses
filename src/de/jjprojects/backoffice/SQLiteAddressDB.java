@@ -20,7 +20,8 @@ public class SQLiteAddressDB {
 
 	static Logger naLogger = Logger.getLogger("de.jjprojects.backoffice");
 
-	private static final String TABLE_NAME = "addresses";
+   private static final String TABLE_NAME = "addresses";
+   private static final String VERSION_NAME = "version";
 
 	private static final String FIRST_NAME_FIELD = "first_name";
 	private static final String SIR_NAME_FIELD = "sir_name";
@@ -37,7 +38,7 @@ public class SQLiteAddressDB {
 	private static final String COMPANY_INDEX = "company_index";
 
 
-	public void createDB (String dbName) {
+	public void createDB (String dbName, String versionStr) {
 		try {
 			File dbFile = new File(dbName);
 			dbFile.delete();
@@ -62,6 +63,7 @@ public class SQLiteAddressDB {
 				String createFirstNameIndexQuery = "CREATE INDEX " + FULL_NAME_INDEX + " ON " + TABLE_NAME + "(" +  FIRST_NAME_FIELD + "," + SIR_NAME_FIELD + ")";
 				String createCityIndexQuery = "CREATE INDEX " + CITY_INDEX + " ON " + TABLE_NAME + "(" +  CITY_FIELD + ")";
 				String createCompanyIndexQuery = "CREATE INDEX " + COMPANY_INDEX + " ON " + TABLE_NAME + "(" +  COMPANY_FIELD + ")";
+            String createVersionTableQuery = "CREATE TABLE version (version TEXT NOT NULL PRIMARY KEY)";
 
 				naLogger.fine(">DB schema queries:");
 				naLogger.fine(createTableQuery);
@@ -69,11 +71,17 @@ public class SQLiteAddressDB {
 				naLogger.fine(createCityIndexQuery);
 				naLogger.fine(createCompanyIndexQuery);
 
-				db.createTable(createTableQuery);
+            db.createTable(createTableQuery);
 				db.createIndex(createFirstNameIndexQuery);
 				db.createIndex(createCityIndexQuery);
 				db.createIndex(createCompanyIndexQuery);
 
+            db.createTable(createVersionTableQuery);
+            boolean versionIsSet = this.insertVersion(versionStr);
+            if (versionIsSet)
+                naLogger.info("Version: " + versionStr);
+            else
+                naLogger.info("Version could not be set in database");
 			} finally {
 				db.commit();
 			}
@@ -87,30 +95,52 @@ public class SQLiteAddressDB {
 		}
 	}
 
-	public boolean insertAddress (AddrComponent contact ) {
-		if (null == db)
-			return false;
+   public boolean insertAddress (AddrComponent contact ) {
+      if (null == db)
+         return false;
 
-		boolean result = false;
-		try {
-			// insert rows:
-			db.beginTransaction(SqlJetTransactionMode.WRITE);
-			try {
-				ISqlJetTable table = db.getTable(TABLE_NAME);
-				table.insert(contact.getAddrKey(), contact.getSirName(), contact.getFirstName(), 
-							 contact.getCompany(), contact.getPhone(),   contact.getMobile(),   contact.getCity(), contact.getEMail(),
-							 contact.getCompanyKey());
-				result = true;
-			} finally {
-				db.commit();
-			}
-		} catch (SqlJetException e) {
-			e.printStackTrace();
-		}
+      boolean result = false;
+      try {
+         // insert rows:
+         db.beginTransaction(SqlJetTransactionMode.WRITE);
+         try {
+            ISqlJetTable table = db.getTable(TABLE_NAME);
+            table.insert(contact.getAddrKey(), contact.getSirName(), contact.getFirstName(), 
+                      contact.getCompany(), contact.getPhone(),   contact.getMobile(),   contact.getCity(), contact.getEMail(),
+                      contact.getCompanyKey());
+            result = true;
+         } finally {
+            db.commit();
+         }
+      } catch (SqlJetException e) {
+         e.printStackTrace();
+      }
 
-		return result;
-	}
-	
+      return result;
+   }
+   
+   public boolean insertVersion (String versionStr) {
+      if (null == db)
+         return false;
+
+      boolean result = false;
+      try {
+         // insert rows:
+         db.beginTransaction(SqlJetTransactionMode.WRITE);
+         try {
+            ISqlJetTable table = db.getTable(VERSION_NAME);
+            table.insert(versionStr);
+            result = true;
+         } finally {
+            db.commit();
+         }
+      } catch (SqlJetException e) {
+         e.printStackTrace();
+      }
+
+      return result;
+   }
+   
 	protected void finalize () {
 		try {
 			if (null != db) 

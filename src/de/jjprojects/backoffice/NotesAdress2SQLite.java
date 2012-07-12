@@ -1,5 +1,13 @@
 package de.jjprojects.backoffice;
 
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.nio.CharBuffer;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -53,6 +61,12 @@ public class NotesAdress2SQLite extends LotusConnector {
 	public void runNotes() {
 		naLogger.entering("ag.fast.backoffice.DHAdress2SQLite", "runNotes");
 
+	     Calendar cal = Calendar.getInstance();
+	     SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddhhmmss");
+	     nowStr = sdf.format(cal.getTime());
+	     String outputDir = this.getProperties().getProperty("output_location", "/var/www/htdocs");
+	     outputFile = outputDir + "/" + nowStr;
+	     
 		try {
 			Session session = getSession();
 			assert null != session : "session is invalid (null)";
@@ -60,7 +74,9 @@ public class NotesAdress2SQLite extends LotusConnector {
 			SQLiteAddressDB sqlDb = new SQLiteAddressDB ();
 			assert null != sqlDb : "sqlDb is invalid (null)";
 			
-			sqlDb.createDB("Addresses.sqlite");
+			sqlDb.createDB(outputFile, nowStr);
+			
+			//TODO: add stuff to export db.php file to outputdir
 			
 			Database dbAddr = getLotusDatabase ("Adressen");
 			assert null != dbAddr : "Database is invalid (null)";
@@ -75,7 +91,7 @@ public class NotesAdress2SQLite extends LotusConnector {
 			Data_Contact scContact = new Data_Contact ();
 			assert null != scContact : "scContact is invalid (null)";
 			int count = 0;
-			while (null != doc && count < 200000) {
+			while (null != doc && count < 5) {
 				String strKey = doc.getItemValueString("DocID");
 				if (null != strKey) {
 					scContact.dataFromLotusDoc (doc, this.getProperties());
@@ -90,6 +106,10 @@ public class NotesAdress2SQLite extends LotusConnector {
 			
 			dcAddr.recycle();
 			dbAddr.recycle();
+			
+			// output the php file with the correct filename included
+         this.writePHPFile(nowStr);
+         
 		} catch(Exception e) {
 
 			e.printStackTrace();
@@ -99,4 +119,25 @@ public class NotesAdress2SQLite extends LotusConnector {
 		naLogger.exiting("ag.fast.backoffice.DHAdress2SQLite", "runNotes");
 	}
 
+	private void writePHPFile (String replacementStr) throws IOException {
+	   String filePath = this.getProperties().getProperty("php_template", "./db.php");
+      FileReader phpFile = new FileReader (filePath);
+      CharBuffer buff = CharBuffer.allocate (2000);
+      phpFile.read(buff);
+      String phpTemplate = new String (buff.array());
+      phpTemplate = phpTemplate.replaceFirst("<db>", nowStr);
+      naLogger.info(phpTemplate);
+      String outputPath = this.getProperties().getProperty("output_location", "/var/www/htdocs")  + "/db.php";
+      FileWriter outFile = new FileWriter(outputPath);
+      assert null != outFile : "PHP File not allocated (null) !";
+      naLogger.info("PHP Filepath: " + outputPath);
+      PrintWriter out = new PrintWriter(outFile);
+      assert null != out : "File Printer not allocated (null) !";
+      out.println(phpTemplate);
+      out.close();
+      outFile.close();
+	};
+	
+   private String nowStr;
+   private String outputFile;
 }
