@@ -3,7 +3,6 @@ package de.jjprojects.backoffice;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.nio.CharBuffer;
 import java.text.SimpleDateFormat;
@@ -19,10 +18,10 @@ import de.jjprojects.lotus.LotusConnector;
 import de.jjprojects.lotus.addresses.Data_Contact;
 
 /**
- utility to read dochouse addresses and insert them into a SQLite database (e.g. to take them on an iPhone)
-  
+ utility to read IBM Lotus Notes addresses and insert them into a SQLite database (e.g. to take them on an iPhone)
+
  @author Copyright (C) 2012  JJ-Projects Joerg Juenger <BR>
-  
+
 <pre>
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -40,87 +39,91 @@ import de.jjprojects.lotus.addresses.Data_Contact;
  */
 public class NotesAdress2SQLite extends LotusConnector {
 
-	static Logger naLogger = Logger.getLogger("ag.fast.backoffice");
+   static Logger naLogger = Logger.getLogger("ag.fast.backoffice");
 
-	/**
-	 * main function to execute the application code
-	 * @param argv array of command line arguments
-	 * 		- optional properties file for Lotus connection data 
-	 */
-	public static void main(String argv[]) {
+   /**
+    * main function to execute the application code
+    * @param argv array of command line arguments
+    * 		- optional properties file for Lotus connection data 
+    */
+   public static void main(String argv[]) {
 
-			naLogger.setLevel(Level.FINEST);
+      naLogger.setLevel(Level.FINEST);
 
-			NotesAdress2SQLite nA = new NotesAdress2SQLite();
-			nA.mainLoop(argv);
-	}
+      NotesAdress2SQLite nA = new NotesAdress2SQLite();
+      nA.mainLoop(argv);
+   }
 
-	/**
-	 * runNotes - main functions of Notes related classes
-	 */
-	public void runNotes() {
-		naLogger.entering("ag.fast.backoffice.DHAdress2SQLite", "runNotes");
+   /**
+    * runNotes - main functions of Notes related classes
+    */
+   public void runNotes() {
+      naLogger.entering("ag.fast.backoffice.DHAdress2SQLite", "runNotes");
 
-	     Calendar cal = Calendar.getInstance();
-	     SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddhhmmss");
-	     nowStr = sdf.format(cal.getTime());
-	     String outputDir = this.getProperties().getProperty("output_location", "/var/www/htdocs");
-	     outputFile = outputDir + "/" + nowStr;
-	     
-		try {
-			Session session = getSession();
-			assert null != session : "session is invalid (null)";
+      // get the actual time as version and file name
+      Calendar cal = Calendar.getInstance();
+      SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddhhmmss");
+      nowStr = sdf.format(cal.getTime());
+      // put the output file path together
+      String outputDir = this.getProperties().getProperty("output_location", "/var/www/htdocs");
+      outputFile = outputDir + "/" + nowStr;
 
-			SQLiteAddressDB sqlDb = new SQLiteAddressDB ();
-			assert null != sqlDb : "sqlDb is invalid (null)";
-			
-			sqlDb.createDB(outputFile, nowStr);
-			
-			//TODO: add stuff to export db.php file to outputdir
-			
-			Database dbAddr = getLotusDatabase ("Adressen");
-			assert null != dbAddr : "Database is invalid (null)";
-			boolean isOpen = dbAddr.open();
-			assert true == isOpen : "database not open yet !";
-			
-			// start iteration through the dochouse address db and push them into the SQLite db
-			DocumentCollection dcAddr = dbAddr.getAllDocuments();
-			assert null != dcAddr : "document collection invalid (null)";
+      try {
+         Session session = getSession();
+         assert null != session : "session is invalid (null)";
 
-			Document doc = dcAddr.getFirstDocument();
-			Data_Contact scContact = new Data_Contact ();
-			assert null != scContact : "scContact is invalid (null)";
-			int count = 0;
-			while (null != doc && count < 5) {
-				String strKey = doc.getItemValueString("DocID");
-				if (null != strKey) {
-					scContact.dataFromLotusDoc (doc, this.getProperties());
-					naLogger.info(scContact.toString());
-					
-					sqlDb.insertAddress(scContact);
-				}
-				doc.recycle();
-				doc = dcAddr.getNextDocument();
-				count++;
-			} // end while (null != doc)
-			
-			dcAddr.recycle();
-			dbAddr.recycle();
-			
-			// output the php file with the correct filename included
+         SQLiteAddressDB sqlDb = new SQLiteAddressDB ();
+         assert null != sqlDb : "sqlDb is invalid (null)";
+
+         sqlDb.createDB(outputFile, nowStr);
+
+         Database dbAddr = getLotusDatabase ("Adressen");
+         assert null != dbAddr : "Database is invalid (null)";
+         boolean isOpen = dbAddr.open();
+         assert true == isOpen : "database not open yet !";
+
+         // start iteration through the dochouse address db and push them into the SQLite db
+         DocumentCollection dcAddr = dbAddr.getAllDocuments();
+         assert null != dcAddr : "document collection invalid (null)";
+
+         Document doc = dcAddr.getFirstDocument();
+         Data_Contact scContact = new Data_Contact ();
+         assert null != scContact : "scContact is invalid (null)";
+         int count = 0;
+         while (null != doc && count < 5) {
+            // get address document from Notes
+            String strKey = doc.getItemValueString("DocID");
+            if (null != strKey) {
+               scContact.dataFromLotusDoc (doc, this.getProperties());
+               naLogger.info(scContact.toString());
+
+               // push contact data into sqlite
+               sqlDb.insertAddress(scContact);
+            }
+            doc.recycle();
+            doc = dcAddr.getNextDocument();
+            count++;
+         } // end while (null != doc)
+
+         dcAddr.recycle();
+         dbAddr.recycle();
+
+         // output the php file with the correct filename included
+         // to make sure the appropriate smart phone app can get it
          this.writePHPFile(nowStr);
-         
-		} catch(Exception e) {
 
-			e.printStackTrace();
+      } catch(Exception e) {
 
-		}	
+         e.printStackTrace();
 
-		naLogger.exiting("ag.fast.backoffice.DHAdress2SQLite", "runNotes");
-	}
+      }	
 
-	private void writePHPFile (String replacementStr) throws IOException {
-	   String filePath = this.getProperties().getProperty("php_template", "./db.php");
+      naLogger.exiting("ag.fast.backoffice.DHAdress2SQLite", "runNotes");
+   }
+
+
+   private void writePHPFile (String replacementStr) throws IOException {
+      String filePath = this.getProperties().getProperty("php_template", "./db.php");
       FileReader phpFile = new FileReader (filePath);
       CharBuffer buff = CharBuffer.allocate (2000);
       buff.clear();
@@ -137,8 +140,8 @@ public class NotesAdress2SQLite extends LotusConnector {
       out.println(phpTemplate);
       out.close();
       outFile.close();
-	};
-	
+   };
+
    private String nowStr;
    private String outputFile;
 }

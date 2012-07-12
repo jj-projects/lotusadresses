@@ -3,7 +3,9 @@
 ## Description
 
 This java application fetches basic date from a Lotus Notes Address Database and creates a new SQLite Database containig this data.
-This data can be used by a iPhone app called "xxxxx" written by Bart-Jan Schuman.
+Additionally it will export a PHP page containing the recent database file and version information 
+to enable an easy download of the database file.
+This data can be used by a iPhone app called "DHaddresses" written by Bart-Jan Schuman.
 
 ## Ant Build
 
