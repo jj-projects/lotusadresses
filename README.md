@@ -7,6 +7,8 @@ Additionally it will export a PHP page containing the recent database file and v
 to enable an easy download of the database file.<BR>
 This data can be used by a iPhone app called "DHaddresses" written by Bart-Jan Schuman.
 
+See the [Wiki](wiki) for more information.
+
 ## Ant Build
 
 On project level execute:
