@@ -36,6 +36,8 @@ public abstract class AddrComponent extends NotesElement {
 			this.setCity(doc.getItemValueString(props.getProperty("db_col_city", "AdrCity")));
 			this.setPhone(doc.getItemValueString(props.getProperty("db_col_phone", "AdrPhoneComplete")));
 			this.setMobile(doc.getItemValueString(props.getProperty("db_col_mobile", "AdrPhoneMobile")));
+			this.setMobile(doc.getItemValueString(props.getProperty("db_col_country", "AdrPhoneCountry")));
+			this.setMobile(doc.getItemValueString(props.getProperty("db_col_street", "AdrPhoneStreet")));
 	}
 
 	public String toString () {
@@ -151,6 +153,34 @@ public abstract class AddrComponent extends NotesElement {
 	}
 
 	/**
+	 * @return the street
+	 */
+	public String getStreet() {
+		return  (null == strStreet) ? "" : strStreet;
+	}
+
+	/**
+	 * @param zip the street to set
+	 */
+	protected void setStreet(String street) {
+		strStreet = street;
+	}
+
+	/**
+	 * @param city the country to set
+	 */
+	protected void setCountry(String country) {
+		strCountry = country;
+	}
+
+	/**
+	 * @return the country
+	 */
+	public String getCountry() {
+		return  (null == strCountry) ? "" : strCountry;
+	}
+
+	/**
 	 * @param zip the zip to set
 	 */
 	protected void setZip(String zip) {
@@ -216,5 +246,7 @@ public abstract class AddrComponent extends NotesElement {
 	private String Company;
 	private String Phone;
 	private String Mobile;
+	private String strStreet;
+	private String strCountry;
 
 }

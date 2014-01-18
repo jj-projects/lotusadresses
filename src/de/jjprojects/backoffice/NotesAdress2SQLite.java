@@ -116,7 +116,7 @@ public class NotesAdress2SQLite extends LotusConnector {
 
          e.printStackTrace();
 
-      }	
+      }	 
 
       naLogger.exiting("ag.fast.backoffice.DHAdress2SQLite", "runNotes");
    }
